@@ -4,8 +4,8 @@ import path from "path"
 
 /**
  * filters the correct files from the potential files
- * 
- * @param potentialFiles 
+ *
+ * @param potentialFiles
  * @returns the found files
  */
 export const findFiles = (exportDir: string, potentialFiles: string[]): string[] => {
@@ -19,6 +19,6 @@ export const findFiles = (exportDir: string, potentialFiles: string[]): string[]
 
   // log amount of found files
 
-  logger.info(`Found ${foundFiles.length} potential image files.`)
+  logger.info(`Found ${foundFiles.length} potential assets files.`)
   return foundFiles.filter(file => file.includes('?'))
 }

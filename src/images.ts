@@ -31,7 +31,7 @@ const findImages = (baseUrl: string, imgPathsArr?: RegExpMatchArray | null): str
 
   }
 
-  logger.warn(`Found ${foundImageFiles.length} potential image files.`)
+  logger.warn(`Found ${foundImageFiles.length} potential assets files.`)
 
 
 
