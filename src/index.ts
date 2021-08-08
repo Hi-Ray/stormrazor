@@ -1,112 +1,73 @@
-import exp from "constants";
-import * as fs from "fs";
-import path from "path";
-import tracer from 'tracer'
+import { Command, Option } from 'commander'
+import { findFiles } from 'finder'
+import download from 'download'
+import logger from 'logger'
+import fs from 'fs-extra'
+import path from 'path'
 
-import arg from 'arg'
-import {DownloaderHelper as download} from 'node-downloader-helper'
-import {Url} from "url";
+/**
+ * main function
+ */
+const handle = async (distURL: string, tmpDir: string) => {
+  // regex for finding paths
+  const pathRegex = /"([^"]*)"/g
+  
+  // the base path without the file
+  const basePath = path.dirname(distURL).replace(':/', '://')
 
-import PrintHelp from './help'
-import fileSearch from './images'
+  // the filename of the dist URL
+  const fileName = path.basename(distURL).split('?')[0]
 
-const VERSION = `1.0.0`
-const LICENSE = `LGPL-3.0`
-
-const logger = tracer.colorConsole()
-
-let args;
-
-
-try {
-  args = arg({
-    // Arg types
-    '--help': Boolean,
-    '--version': Boolean,
-    '--verbose': Boolean,
-    '--url': String,
-
-    // Aliases
-    '-v': '--verbose',
-    '-h': '--help',
-    '-u': '--url'
-  })
-} catch (e) {
-  PrintHelp(VERSION, LICENSE)
-}
-
-if (args['--help'] === true) {
-  PrintHelp(VERSION, LICENSE)
-}
-
-if (args['--verbose']) {
-  tracer.setLevel('trace')
-  logger.warn(`VERBOSE LOGGING ENABLED`)
-} else {
-  tracer.setLevel('warn')
-}
-
-if (args['--url']) {
-  const Arg = args['--url']
-  const BASEURL = path.dirname(Arg)
-  const DistName = path.basename(Arg)
-
-  logger.warn(`Using base url of`, BASEURL)
-
-  if (!DistName.startsWith('dist.js')) {
-    logger.error('Please provide the dist file of the frontpage')
-    process.exit(0)
+  // check if file is a dist file
+  if (fileName !== 'dist.js') {
+    logger.error('please provide the dist file of the frontpage')
+    process.exit(1)
   }
 
+  // create temporary directory
+  await fs.mkdir(tmpDir, { recursive: true })
 
-  const dl = new download(Arg, '_tmp');
+  // download the fist file
+  await download(distURL, tmpDir)
 
-  dl.on('end', () => {
-    logger.info('Downloaded dist file')
+  // get the contents of the file
+  const content = await fs.readFile(path.join(tmpDir, fileName), { encoding: 'utf8' })
 
-    const data = fs.readFileSync('./_tmp/dist.js',
-        {encoding:'utf8', flag:'r'});
+  // find potential files
+  const potentialFiles: string[] = (content.match(pathRegex) ?? [])
+    .map(x => x.slice(x.startsWith('"') ? 1 : 0, x.length - 1))
 
-    const results = data.toString().match(/"([^"]*)"/g)
+  // log count of potential files
+  logger.info(`found ${potentialFiles.length} potential files.`)
 
-    logger.warn(`Found ${results?.length} potential files.`)
+  // finds the files from the potential files
+  const foundFiles = findFiles(tmpDir, potentialFiles)
+  
+  // download each found file
+  for (const foundFile of foundFiles) {
+    // create the export directory
+    const exportDir = path.join(tmpDir, path.dirname(foundFile))
+    await fs.mkdir(exportDir, { recursive: true })
 
-
-    const files = fileSearch(BASEURL, results)
-
-    let exportedFiles: string[] = []
-
-    files.forEach(file => {
-      const imagePath = path.dirname(file)
-      const exportPath = path.join(BASEURL, imagePath)
-      logger.info(exportPath)
-
-      try {
-        fs.mkdirSync(path.join('out', path.dirname(exportPath) || './'), {recursive: true})
-      } catch (e) {
-        logger.warn(`out path already exists`)
-      }
-
-      const downloader = new download(new URL(file, BASEURL).toString(), path.join('out', path.dirname(exportPath) || './'))
-
-      downloader.on('end', () => {
-        logger.trace(`Downloaded file: ${file}`)
-        exportedFiles.push(file);
-      })
-
-      downloader.start().catch(null)
-    })
-
+    // formats the download path
+    const downloadPath = path.join(basePath, foundFile).replace(':/', '://')
 
     try {
-      fs.writeFileSync(path.join('out', 'exported.txt'), exportedFiles.join('\n'))
-    } catch (e) {
-      logger.error('exported.txt already exists')
+      // downloads the file
+      await download(downloadPath, exportDir)
+      logger.info(`downloaded ${foundFile}`)
+    } catch {
+      logger.warn(`failed to download ${foundFile}`)
     }
-
-    fs.rmSync('tmp/dist.js')
-  })
-
-  dl.start().catch(logger.error)
+  }
 }
- // /"([^"]*)"/g
+
+// creates the CLI
+const program = (new Command())
+  .addOption(new Option('-o, --out <directory>', 'the output directory').default('export'))
+  .argument('<url>', 'url for the dist file')
+  .action((url) => handle(url, program.opts().out))
+  .version('1.0.0')
+
+// parses the CLI
+program.parse()

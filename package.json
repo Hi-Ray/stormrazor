@@ -4,20 +4,23 @@
   "version": "1.0.0",
   "main": "dist/src/index.js",
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register src/",
-    "start": "ts-node -r tsconfig-paths/register src/"
+    "rename": "ts-node-dev -r tsconfig-paths/register src/rename.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register src",
+    "start": "ts-node -r tsconfig-paths/register src"
+  },
+  "dependencies": {
+    "commander": "^8.1.0",
+    "download": "^8.0.0",
+    "fs-extra": "^10.0.0",
+    "tracer": "^1.1.5"
   },
   "devDependencies": {
+    "@types/download": "^8.0.1",
+    "@types/fs-extra": "^9.0.12",
     "@types/node": "^16.4.13",
     "ts-node": "^10.1.0",
     "ts-node-dev": "^1.1.8",
     "tsconfig-paths": "^3.10.1",
     "typescript": "^4.3.5"
-  },
-  "dependencies": {
-    "arg": "^5.0.0",
-    "fs-extra": "^10.0.0",
-    "node-downloader-helper": "^1.0.18",
-    "tracer": "^1.1.5"
   }
 }
