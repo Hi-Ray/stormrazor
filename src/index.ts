@@ -50,7 +50,7 @@ const handle = async (distURL: string, tmpDir: string) => {
     await fs.mkdir(exportDir, { recursive: true })
 
     // formats the download path
-    const downloadPath = path.join(basePath, foundFile).replace(':/', '://')
+    const downloadPath = path.join(basePath, foundFile).replace(':/', '://').replace(':\\', "://")
 
     try {
       // downloads the file
