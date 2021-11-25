@@ -37,7 +37,7 @@ yarn start <dist-url>
 
 
 
-## Event dist files 
+## Event dist files (view the entire [README.md](README.md) to see all events)
 ```
 Spirit blossom 2020:
 https://lolstatic-a.akamaihd.net/frontpage/apps/prod/spirit-blossom-hub-2020/en_GB/6da227ab8e4e8ddc1b7ddebf1ea05ec7ad89867c/assets/dist.js
