@@ -57,8 +57,14 @@ https://lolstatic-a.akamaihd.net/frontpage/apps/prod/sentinels-hub-2021/en_GB/93
 Worlds Hub 2021:
 https://lolstatic-a.akamaihd.net/frontpage/apps/prod/worlds-hub-2021/en_US/17a56286bb459868c5e4c72b92a9f16726359cc4/assets/dist.js
 
-Preseason Hub 2021 :
+Preseason Hub 2021:
 https://lolstatic-a.akamaihd.net/frontpage/apps/prod/arcane-lexp-hub-2021/en_GB/fab04d3a0e665e95d412cb80704473e4850280b5/assets/dist.js?68e0e6c4645900e2124b
+
+Arcane lexp hub 2021:
+https://lolstatic-a.akamaihd.net/frontpage/apps/prod/arcane-lexp-hub-2021/en_GB/35788d30725ba590d6988b858ed1c928945f43bf/assets/dist.js?bdbaeb6d54e0718e33c3
+
+Arcane nlex hub 2021:
+https://lolstatic-a.akamaihd.net/frontpage/apps/prod/arcane-nlex-hub-2021/en_GB/0e7e6ab662743fae784c12175a59fc030ea538bc/assets/dist.js
 ```
 
 ## Credits
