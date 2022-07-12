@@ -65,6 +65,9 @@ https://lolstatic-a.akamaihd.net/frontpage/apps/prod/arcane-lexp-hub-2021/en_GB/
 
 Arcane nlex hub 2021:
 https://lolstatic-a.akamaihd.net/frontpage/apps/prod/arcane-nlex-hub-2021/en_GB/0e7e6ab662743fae784c12175a59fc030ea538bc/assets/dist.js
+
+Star Guardian Marketing Hub 2022:
+https://lolstatic-a.akamaihd.net/frontpage/apps/prod/star-guardians-marketing-hub-2022/en_GB/dcb86769107c74ec4509b1acb90a6a5ceeb605f3/assets/dist.js?24a9a19f345caae42c98
 ```
 
 ## Credits
